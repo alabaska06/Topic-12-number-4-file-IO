@@ -25,13 +25,71 @@ namespace Topic_12_number_4_file_IO
                 {
                     case 1:
                         Console.WriteLine("Scores:");
-                        Console.WriteLine(eventScores);
+                        PrintScores(eventScores);
                         break;
                     case 2:
                         Console.WriteLine("Highest Scores:");
-                        Console.WriteLine();
+                        PrintHighestScores(eventScores);
+                        break;
+                    case 3:
+                        PrintLowestScore(eventScores);
+                        break;
+                    case 0:
+                        Console.WriteLine("Exiting program...");
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please enter a valid option.");
                         break;
                 }
+            } while (choice != 0);
+        }
+
+
+    }
+
+    static List<EventScore>ReadEventScoresFromFile(string filename)
+                {
+                    List<EventScore> eventScores = new List<EventScore>(0);
+
+                    using (StreamReader reader = new StreamReader(filename))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            string[] parts = line.Split(',');
+                            string name = parts[0];
+                            string eventName = parts[1];
+                            List<double> scores = parts.Skip(2).Select(double.Parse).ToList();
+
+                            eventScores.Add(new EventScore(name, eventName, scores));w
+                        }
+                    }
+                    return eventScores;
+                }
+
+                static void PrintScores(List<EventScore> eventScores)
+                {
+                    foreach (EventScore eventScore in eventScores)
+                    {
+                        Console.WriteLine(eventScore);
+                    }
+                }
+
+                static void PrintHighestScores(List<EventScore> eventscores)
+                {
+                    EventScore highestScore = eventscores.OrderByDescending(e => e.GetTotalScore()).First();
+                    Console.WriteLine("Higest Score:");
+                    Console.WriteLine(highestScore);
+                }
+                static void PrintLowestScore(List<EventScore> eventScores)
+                {
+                    EventScore lowestScore = eventScores.OrderBy(e => e.GetTotalScore()).First();
+                    Console.WriteLine("Lowest Score:");
+                    Console.WriteLine(lowestScore);                }
+
+
+
+
             }
 
 
